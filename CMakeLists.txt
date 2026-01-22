@@ -13,6 +13,7 @@ set(ACCOUNTSQT_DEP_VERSION "1.13")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(ECM ${KF6_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
@@ -351,3 +352,10 @@ if(BUILD_DOC)
 endif()
 
 ki18n_install(po)
+
+add_custom_command(TARGET webappcontainer POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+    "${CMAKE_BINARY_DIR}/compile_commands.json"
+    "${CMAKE_SOURCE_DIR}/compile_commands.json"
+    COMMENT "Updating compile_commands.json symlink in source root"
+)
